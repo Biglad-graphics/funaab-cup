@@ -1,2 +1,6 @@
+[build]
+  publish = "funaab-final-v3"
+  functions = "funaab-final-v3/netlify/functions"
+
 [functions]
-  directory = "netlify/functions"
+  directory = "funaab-final-v3/netlify/functions"
