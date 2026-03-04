@@ -1,0 +1,2260 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FUNAAB FA Cup 2026</title>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<link rel="manifest" href="/manifest.json" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="FUNAAB Cup" />
+<link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+<meta name="theme-color" content="#00E676" />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — FUNAAB FA CUP
+   Aesthetic: Editorial Sports Magazine
+   Dark/Light Dual Theme
+═══════════════════════════════════════════ */
+
+:root {
+  --accent: #00E676;
+  --accent-dim: #00c15e;
+  --accent-glow: rgba(0,230,118,0.18);
+  --red: #FF3B3B;
+  --amber: #FFB800;
+  --blue: #2979FF;
+
+  /* DARK */
+  --bg: #0a0a0f;
+  --bg2: #111118;
+  --bg3: #18181f;
+  --bg4: #1e1e28;
+  --card: #14141c;
+  --card2: #1a1a24;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f0f5;
+  --text2: #9090a8;
+  --text3: #5a5a72;
+  --shadow: 0 8px 32px rgba(0,0,0,0.5);
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.4);
+  --invert-logo: 0;
+}
+
+[data-theme="light"] {
+  --bg: #f0f0f5;
+  --bg2: #e8e8ef;
+  --bg3: #ffffff;
+  --bg4: #f5f5fa;
+  --card: #ffffff;
+  --card2: #f8f8fc;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text: #0f0f1a;
+  --text2: #5a5a72;
+  --text3: #9090a8;
+  --shadow: 0 8px 32px rgba(0,0,0,0.1);
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.07);
+  --invert-logo: 1;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background .3s, color .3s;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius:4px; }
+
+/* ══════════════════════════════════════
+   KEYFRAMES
+══════════════════════════════════════ */
+@keyframes fadeUp   { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+@keyframes slideRight { from { opacity:0; transform:translateX(-18px); } to { opacity:1; transform:translateX(0); } }
+@keyframes slideDown { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
+@keyframes slideInRight { from { transform:translateX(110px); opacity:0; } to { transform:translateX(0); opacity:1; } }
+@keyframes slideOutRight { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(110px); } }
+@keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:.4} }
+@keyframes shimmer  { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+@keyframes spin     { to { transform:rotate(360deg); } }
+@keyframes scaleIn  { from{transform:scale(.94);opacity:0} to{transform:scale(1);opacity:1} }
+@keyframes livePulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,59,59,.5)} 50%{box-shadow:0 0 0 6px rgba(255,59,59,0)} }
+
+/* ══════════════════════════════════════
+   TOASTS
+══════════════════════════════════════ */
+#toast-wrap {
+  position: fixed; top:20px; right:20px; z-index:9999;
+  display:flex; flex-direction:column; gap:10px; pointer-events:none;
+  max-width: 320px; width: calc(100vw - 40px);
+}
+.toast {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  display: flex; align-items:flex-start; gap:12px;
+  pointer-events:all;
+  animation: slideInRight .35s cubic-bezier(.25,.46,.45,.94);
+  transition: background .3s, border .3s;
+}
+.toast.goal  { border-left-color: var(--accent); }
+.toast.red-card { border-left-color: var(--red); }
+.toast.info  { border-left-color: var(--amber); }
+.toast.match { border-left-color: var(--blue); }
+.toast-dot {
+  width: 8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px;
+  background: var(--accent);
+}
+.toast.goal .toast-dot  { background:var(--accent); }
+.toast.red-card .toast-dot { background:var(--red); }
+.toast.info .toast-dot  { background:var(--amber); }
+.toast.match .toast-dot { background:var(--blue); }
+.toast-content { flex:1; }
+.toast-title { font-family:'Barlow Condensed'; font-weight:700; font-size:14px; letter-spacing:.5px; text-transform:uppercase; }
+.toast-body  { font-size:12px; color:var(--text2); margin-top:3px; line-height:1.4; }
+.toast-close { background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; flex-shrink:0; padding:0; line-height:1; transition:color .2s; }
+.toast-close:hover { color:var(--text); }
+
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+header {
+  position: sticky; top:0; z-index:200;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+  height: 60px;
+  display: flex; align-items:center; justify-content:space-between;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: background .3s, border .3s;
+}
+.logo {
+  display:flex; align-items:center; gap:11px;
+  text-decoration:none; color:inherit;
+}
+.logo-mark {
+  width:36px; height:36px;
+  background: var(--accent);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.logo-mark svg { width:20px; height:20px; }
+.logo-text { line-height:1; }
+.logo-name {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:18px; letter-spacing:1.5px; text-transform:uppercase;
+  display:block;
+}
+.logo-sub {
+  font-family:'Barlow Condensed'; font-weight:600;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color: var(--accent); display:block;
+}
+.header-right { display:flex; align-items:center; gap:10px; }
+
+.live-pill {
+  display: none;
+  align-items:center; gap:5px;
+  background: rgba(255,59,59,.12);
+  border: 1px solid rgba(255,59,59,.25);
+  color: var(--red);
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  padding: 4px 10px; border-radius:20px;
+  animation: livePulse 2s infinite;
+}
+.live-pill .dot { width:6px; height:6px; border-radius:50%; background:var(--red); animation:pulse 1s infinite; }
+
+.theme-btn {
+  width:36px; height:36px; border-radius:8px;
+  background: var(--bg3); border:1px solid var(--border);
+  color: var(--text2); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: all .2s; flex-shrink:0;
+}
+.theme-btn:hover { border-color:var(--accent); color:var(--accent); }
+.theme-btn svg { width:16px; height:16px; }
+
+.admin-btn {
+  height:36px; padding:0 16px;
+  background: var(--text); color: var(--bg);
+  border:none; border-radius:8px;
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:13px; letter-spacing:1px; text-transform:uppercase;
+  cursor:pointer; transition: all .2s;
+  display:flex; align-items:center; gap:6px;
+  flex-shrink:0;
+}
+.admin-btn:hover { background: var(--accent); color:#000; }
+.admin-btn svg { width:14px; height:14px; }
+
+/* ══════════════════════════════════════
+   NAV TABS
+══════════════════════════════════════ */
+.nav-strip {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  display:flex; gap:2px;
+  overflow-x:auto; scrollbar-width:none;
+  transition: background .3s, border .3s;
+}
+.nav-strip::-webkit-scrollbar { display:none; }
+.tab {
+  padding: 13px 18px;
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:13px; letter-spacing:1.5px; text-transform:uppercase;
+  color: var(--text3); cursor:pointer;
+  border-bottom: 2px solid transparent;
+  white-space:nowrap; transition: all .2s;
+  user-select:none;
+}
+.tab.active { color:var(--accent); border-bottom-color:var(--accent); }
+.tab:hover:not(.active) { color:var(--text2); }
+
+/* ══════════════════════════════════════
+   MAIN LAYOUT
+══════════════════════════════════════ */
+main { flex:1; padding:24px 20px; max-width:920px; margin:0 auto; width:100%; }
+.page { display:none; }
+.page.active { display:block; animation: fadeUp .35s cubic-bezier(.25,.46,.45,.94); }
+
+/* ══════════════════════════════════════
+   HERO BANNER
+══════════════════════════════════════ */
+.hero {
+  position:relative; overflow:hidden;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 32px;
+  margin-bottom: 28px;
+  transition: background .3s, border .3s;
+}
+.hero-bg {
+  position:absolute; inset:0; pointer-events:none;
+  overflow:hidden;
+}
+.hero-bg-line {
+  position:absolute;
+  width:2px; background:var(--accent); opacity:.08;
+  animation:none;
+}
+.hero-bg-line:nth-child(1) { left:8%; height:100%; }
+.hero-bg-line:nth-child(2) { left:18%; height:100%; opacity:.05; }
+.hero-bg-line:nth-child(3) { right:22%; height:100%; opacity:.04; }
+.hero-grid-text {
+  position:absolute; right:-20px; top:50%; transform:translateY(-50%);
+  font-family:'Barlow Condensed'; font-weight:900; font-size:140px;
+  color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.04);
+  letter-spacing:-5px; white-space:nowrap; pointer-events:none;
+  user-select:none;
+}
+[data-theme="light"] .hero-grid-text { -webkit-text-stroke-color:rgba(0,0,0,.05); }
+.hero-eyebrow {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:11px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.hero-eyebrow::before { content:''; display:block; width:24px; height:2px; background:var(--accent); }
+.hero h1 {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:clamp(38px,6vw,64px); letter-spacing:-1px; line-height:.95;
+  text-transform:uppercase; margin-bottom:16px; position:relative;
+}
+.hero h1 em { font-style:normal; color:var(--accent); }
+.hero-desc {
+  font-size:14px; color:var(--text2); margin-bottom:28px;
+  font-weight:400; line-height:1.5; max-width:380px;
+}
+.hero-stats { display:flex; gap:0; }
+.hero-stat {
+  padding: 0 28px 0 0; margin-right:28px;
+  border-right: 1px solid var(--border);
+}
+.hero-stat:last-child { border-right:none; }
+.hero-stat-val {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:36px; color:var(--text); line-height:1;
+}
+.hero-stat-val span { color:var(--accent); }
+.hero-stat-lbl {
+  font-family:'Barlow Condensed'; font-weight:600;
+  font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text3); margin-top:2px;
+}
+
+/* ══════════════════════════════════════
+   SECTION HEADER
+══════════════════════════════════════ */
+.sec-head {
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:16px; margin-top:8px;
+}
+.sec-title {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:22px; letter-spacing:1px; text-transform:uppercase;
+  white-space:nowrap;
+}
+.sec-line { flex:1; height:1px; background:var(--border); }
+.sec-count {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:12px; letter-spacing:1px;
+  color:var(--text3); white-space:nowrap;
+}
+
+/* ══════════════════════════════════════
+   MATCH CARDS
+══════════════════════════════════════ */
+.match-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  overflow:hidden;
+  transition: transform .2s, box-shadow .2s, border-color .2s, background .3s;
+  animation: fadeUp .35s ease both;
+  cursor:default;
+}
+.match-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--border2);
+}
+.mc-top {
+  padding: 12px 16px 0;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.mc-stage {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:10px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--text3);
+}
+.mc-badge {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+  padding:3px 9px; border-radius:4px;
+}
+.mc-badge.live {
+  background: rgba(255,59,59,.15);
+  color: var(--red);
+  animation: pulse 1.5s infinite;
+}
+.mc-badge.upcoming { background:rgba(255,184,0,.12); color:var(--amber); }
+.mc-badge.finished { background:rgba(0,230,118,.1); color:var(--accent); }
+
+.mc-body {
+  padding: 14px 16px 16px;
+  display:grid; grid-template-columns:1fr auto 1fr; gap:12px; align-items:center;
+}
+.mc-team { display:flex; flex-direction:column; gap:6px; }
+.mc-team.home { align-items:flex-start; }
+.mc-team.away { align-items:flex-end; }
+.mc-team-crest {
+  width:44px; height:44px; border-radius:8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:14px; letter-spacing:1px;
+  color: var(--text2); text-transform:uppercase;
+  transition: background .3s;
+}
+.mc-team-name {
+  font-family:'Barlow Condensed'; font-weight:800;
+  font-size:15px; letter-spacing:.5px; text-transform:uppercase;
+  line-height:1.1;
+}
+.mc-team-label {
+  font-size:10px; font-weight:500; letter-spacing:1px;
+  text-transform:uppercase; color:var(--text3);
+}
+.mc-center { text-align:center; }
+.mc-score {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:48px; letter-spacing:-2px; line-height:1;
+  display:flex; align-items:center; gap:2px;
+}
+.mc-score .sc-sep { color:var(--text3); font-size:36px; margin:0 4px; }
+.mc-vs {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:22px; color:var(--text3); letter-spacing:2px;
+}
+.mc-minute {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:12px; letter-spacing:2px; color:var(--accent);
+  margin-top:2px;
+}
+.mc-footer {
+  padding: 10px 16px;
+  background: var(--bg3);
+  border-top: 1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:11px; color:var(--text3); font-weight:500; letter-spacing:.5px;
+  transition: background .3s;
+}
+.mc-footer-item { display:flex; align-items:center; gap:5px; }
+.mc-footer svg { width:11px; height:11px; opacity:.6; }
+
+.events-strip {
+  padding: 8px 16px 10px;
+  border-top: 1px solid var(--border);
+  display:flex; flex-direction:column; gap:4px;
+}
+.event-row {
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; animation:slideRight .3s ease;
+}
+.ev-min {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:11px; color:var(--text3); width:24px; flex-shrink:0;
+}
+.ev-type {
+  width:16px; height:16px; border-radius:3px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.ev-type.goal { background:rgba(0,230,118,.15); }
+.ev-type.yellow { background:rgba(255,184,0,.15); }
+.ev-type.red { background:rgba(255,59,59,.15); }
+.ev-type svg { width:9px; height:9px; }
+.ev-player { font-weight:600; font-size:12px; }
+.ev-team { margin-left:auto; color:var(--text3); font-size:11px; font-weight:500; }
+
+/* ══════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════ */
+.empty-state {
+  text-align:center; padding:48px 20px;
+  border: 1px dashed var(--border2);
+  border-radius:12px; color:var(--text3);
+  animation: fadeIn .4s ease;
+}
+.empty-state svg { width:40px; height:40px; opacity:.3; margin-bottom:12px; }
+.empty-state h3 {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:16px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--text2); margin-bottom:4px;
+}
+.empty-state p { font-size:13px; line-height:1.5; }
+
+/* ══════════════════════════════════════
+   FILTER BAR
+══════════════════════════════════════ */
+.filter-bar { display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap; }
+.fbtn {
+  height:32px; padding:0 16px;
+  border:1px solid var(--border2);
+  border-radius:6px;
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text3); background:transparent;
+  cursor:pointer; transition:all .18s;
+}
+.fbtn:hover { border-color:var(--accent); color:var(--accent); }
+.fbtn.active { background:var(--accent); color:#000; border-color:var(--accent); }
+
+/* ══════════════════════════════════════
+   STANDINGS TABLE
+══════════════════════════════════════ */
+.group-block { margin-bottom:24px; animation:fadeUp .35s ease both; }
+.group-header {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  border-radius:12px 12px 0 0;
+  padding: 14px 20px;
+  display:flex; align-items:center; justify-content:space-between;
+  transition:background .3s;
+}
+.group-header-name {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:18px; letter-spacing:2px; text-transform:uppercase;
+}
+.group-header-sub {
+  font-size:11px; font-weight:500; color:var(--text3); letter-spacing:.5px;
+}
+.qualify-badge {
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:10px; letter-spacing:1.5px; text-transform:uppercase;
+  padding:3px 9px; border-radius:4px;
+  background:rgba(0,230,118,.1); color:var(--accent);
+}
+.standings-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius:0 0 12px 12px; overflow:hidden;
+  transition:background .3s;
+}
+table.st { width:100%; border-collapse:collapse; }
+table.st thead th {
+  padding: 10px 14px;
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text3); text-align:left;
+  background:var(--bg3); border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+table.st thead th:not(:first-child):not(:nth-child(2)) { text-align:center; }
+table.st tbody tr { border-bottom:1px solid var(--border); transition:background .15s; }
+table.st tbody tr:last-child { border-bottom:none; }
+table.st tbody tr:hover { background:var(--bg3); }
+table.st tbody td { padding:12px 14px; font-size:13px; font-weight:500; }
+table.st tbody td:not(:first-child):not(:nth-child(2)) { text-align:center; color:var(--text2); }
+
+.pos-num {
+  width:24px; height:24px; border-radius:5px;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-family:'Barlow Condensed'; font-weight:800; font-size:13px;
+  background:var(--bg4);
+}
+.pos-num.q { background:rgba(0,230,118,.15); color:var(--accent); }
+.pos-num.x { background:rgba(255,59,59,.1); color:var(--red); }
+
+.team-cell { display:flex; align-items:center; gap:10px; font-weight:700; }
+.team-abbr {
+  width:28px; height:28px; border-radius:6px;
+  background:var(--bg4); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Barlow Condensed'; font-weight:800; font-size:11px;
+  color:var(--text2); flex-shrink:0; letter-spacing:.5px;
+  transition:background .3s;
+}
+.form-row { display:flex; gap:3px; justify-content:center; }
+.form-dot {
+  width:14px; height:14px; border-radius:3px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Barlow Condensed'; font-weight:800; font-size:8px; color:#fff;
+}
+.form-dot.w { background:var(--accent); color:#000; }
+.form-dot.d { background:var(--amber); color:#000; }
+.form-dot.l { background:var(--red); }
+.pts-bold { font-family:'Barlow Condensed'; font-weight:900; font-size:16px; color:var(--text) !important; }
+
+/* ══════════════════════════════════════
+   BRACKET
+══════════════════════════════════════ */
+.bracket-wrap {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; overflow:hidden; transition:background .3s;
+}
+.bracket-scroll { overflow-x:auto; padding:20px; }
+.bracket-grid { display:flex; gap:0; min-width:560px; align-items:stretch; }
+.b-round { flex:1; }
+.b-round-head {
+  text-align:center; padding:8px 4px 14px;
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--text3);
+}
+.b-round-matches { display:flex; flex-direction:column; justify-content:space-around; gap:10px; height:calc(100% - 36px); }
+.b-match {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:8px; overflow:hidden; margin:0 4px;
+  transition:border-color .2s, background .3s;
+}
+.b-match:hover { border-color:var(--border2); }
+.b-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 12px; font-size:12px; font-weight:600;
+  border-bottom:1px solid var(--border);
+  transition:background .2s;
+}
+.b-row:last-child { border-bottom:none; }
+.b-row.winner { background:rgba(0,230,118,.08); color:var(--accent); }
+.b-row-score {
+  font-family:'Barlow Condensed'; font-weight:800;
+  font-size:15px; color:var(--text2);
+}
+
+/* ══════════════════════════════════════
+   TOP SCORERS
+══════════════════════════════════════ */
+.scorers-wrap {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:12px; overflow:hidden; transition:background .3s;
+}
+.scorer-row {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 20px; border-bottom:1px solid var(--border);
+  transition:background .15s; animation:fadeUp .3s ease both;
+}
+.scorer-row:last-child { border-bottom:none; }
+.scorer-row:hover { background:var(--bg3); }
+.sc-rank {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:28px; width:32px; text-align:center;
+  color:var(--text3); line-height:1; flex-shrink:0;
+}
+.sc-rank.gold { color:#FFB800; }
+.sc-rank.silver { color:#aaaaaa; }
+.sc-rank.bronze { color:#cd7f32; }
+.sc-avatar {
+  width:42px; height:42px; border-radius:10px;
+  background:var(--bg4); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Barlow Condensed'; font-weight:900; font-size:15px;
+  color:var(--text2); flex-shrink:0; letter-spacing:.5px;
+  transition:background .3s;
+}
+.sc-info { flex:1; }
+.sc-name { font-family:'Barlow Condensed'; font-weight:800; font-size:17px; letter-spacing:.5px; text-transform:uppercase; line-height:1; }
+.sc-team { font-size:11px; font-weight:500; color:var(--text3); letter-spacing:.5px; margin-top:3px; }
+.sc-goals-badge {
+  background:var(--accent); color:#000;
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:22px; padding:4px 14px; border-radius:6px;
+  line-height:1.2; flex-shrink:0;
+}
+.goals-bar {
+  height:3px; background:var(--border2); border-radius:2px;
+  margin-top:8px; overflow:hidden;
+}
+.goals-bar-fill {
+  height:100%; background:var(--accent); border-radius:2px;
+  transition:width .6s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* ══════════════════════════════════════
+   LOGIN OVERLAY
+══════════════════════════════════════ */
+#login-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.7); backdrop-filter:blur(10px);
+  z-index:2000; display:none; align-items:center; justify-content:center;
+  padding:20px;
+}
+#login-overlay.open { display:flex; }
+.login-box {
+  background:var(--card); border:1px solid var(--border2);
+  border-radius:16px; padding:40px; width:100%; max-width:360px;
+  text-align:center; box-shadow:var(--shadow);
+  animation:scaleIn .3s cubic-bezier(.25,.46,.45,.94);
+  transition:background .3s;
+}
+.login-icon {
+  width:56px; height:56px; border-radius:14px;
+  background:rgba(0,230,118,.1); border:1px solid rgba(0,230,118,.2);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 20px;
+}
+.login-icon svg { width:26px; height:26px; color:var(--accent); }
+.login-box h2 {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:28px; letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:6px;
+}
+.login-box p { font-size:13px; color:var(--text2); margin-bottom:24px; line-height:1.5; }
+.login-input {
+  width:100%; padding:12px 16px;
+  background:var(--bg3); border:1px solid var(--border2);
+  border-radius:9px; color:var(--text);
+  font-family:'Barlow'; font-size:14px; margin-bottom:10px; outline:none;
+  transition:border .2s, background .3s;
+}
+.login-input:focus { border-color:var(--accent); }
+.login-err {
+  font-size:12px; color:var(--red); margin-bottom:10px;
+  display:none; font-weight:600; letter-spacing:.5px;
+}
+.login-actions { display:flex; flex-direction:column; gap:8px; }
+
+/* ══════════════════════════════════════
+   PUSH NOTIFICATION BANNER
+══════════════════════════════════════ */
+#push-banner {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  z-index: 8000; width: calc(100vw - 32px); max-width: 440px;
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 16px; padding: 18px 20px;
+  box-shadow: 0 12px 48px rgba(0,0,0,.55);
+  animation: fadeUp .4s cubic-bezier(.25,.46,.45,.94);
+  display: none;
+}
+#push-banner.show { display: flex; gap: 14px; align-items: flex-start; }
+.push-banner-icon {
+  width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+  background: rgba(0,230,118,.12); border: 1px solid rgba(0,230,118,.25);
+  display: flex; align-items: center; justify-content: center;
+}
+.push-banner-icon svg { width: 22px; height: 22px; color: var(--accent); }
+.push-banner-text { flex: 1; }
+.push-banner-title {
+  font-family: 'Barlow Condensed'; font-weight: 800;
+  font-size: 15px; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 3px;
+}
+.push-banner-sub { font-size: 12px; color: var(--text2); line-height: 1.4; }
+.push-banner-actions { display: flex; gap: 8px; margin-top: 12px; }
+.push-allow-btn {
+  height: 34px; padding: 0 18px; border-radius: 8px; border: none;
+  background: var(--accent); color: #000;
+  font-family: 'Barlow Condensed'; font-weight: 700;
+  font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; transition: all .2s;
+}
+.push-allow-btn:hover { background: #00ff8a; }
+.push-deny-btn {
+  height: 34px; padding: 0 14px; border-radius: 8px;
+  background: transparent; color: var(--text3); border: 1px solid var(--border2);
+  font-family: 'Barlow Condensed'; font-weight: 700;
+  font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+  cursor: pointer; transition: all .2s;
+}
+.push-deny-btn:hover { color: var(--text); border-color: var(--text2); }
+
+/* Push status badge in admin */
+.push-status-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; border-radius: 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  margin-bottom: 16px; font-size: 13px; font-weight: 600;
+  transition: background .3s;
+}
+.push-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.push-dot.ok  { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.push-dot.off { background: var(--text3); }
+.push-dot.err { background: var(--red); }
+.push-channel-info {
+  font-size: 11px; color: var(--text3); margin-top: 4px; letter-spacing: .3px;
+}
+.ntfy-channel-box {
+  background: var(--bg4); border: 1px solid var(--border2);
+  border-radius: 8px; padding: 10px 14px; font-size: 12px;
+  font-family: monospace; color: var(--accent); margin-top: 8px;
+  word-break: break-all; letter-spacing: .5px;
+}
+.push-target-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px;
+}
+.ptab {
+  height: 30px; padding: 0 14px; border-radius: 6px;
+  border: 1px solid var(--border2); background: transparent;
+  color: var(--text3); cursor: pointer;
+  font-family: 'Barlow Condensed'; font-weight: 700;
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+  transition: all .18s;
+}
+.ptab.active { background: var(--accent); color: #000; border-color: var(--accent); }
+.ptab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+/* ══════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════ */
+.btn {
+  padding:11px 20px; border-radius:9px; border:none;
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:14px; letter-spacing:1.5px; text-transform:uppercase;
+  cursor:pointer; transition:all .2s;
+}
+.btn-accent { background:var(--accent); color:#000; }
+.btn-accent:hover { background:#00ff8a; }
+.btn-danger { background:var(--red); color:#fff; }
+.btn-danger:hover { opacity:.85; }
+.btn-ghost { background:transparent; color:var(--text2); border:1px solid var(--border2); }
+.btn-ghost:hover { border-color:var(--text2); color:var(--text); }
+.btn-dark { background:var(--text); color:var(--bg); }
+.btn-dark:hover { opacity:.85; }
+.btn-sm { padding:6px 13px; font-size:11px; border-radius:6px; }
+
+/* ══════════════════════════════════════
+   ADMIN PORTAL
+══════════════════════════════════════ */
+#admin-overlay {
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.65); backdrop-filter:blur(6px);
+  z-index:500; display:none;
+  overflow-y:auto; padding:20px;
+}
+#admin-overlay.open { display:flex; align-items:flex-start; justify-content:center; }
+.admin-modal {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:16px; width:100%; max-width:880px;
+  margin:auto; overflow:hidden;
+  box-shadow:var(--shadow);
+  animation:scaleIn .3s cubic-bezier(.25,.46,.45,.94);
+  transition:background .3s, border .3s;
+}
+.admin-topbar {
+  background:var(--bg3); border-bottom:1px solid var(--border);
+  padding:18px 24px; display:flex; align-items:center; justify-content:space-between;
+  transition:background .3s;
+}
+.admin-topbar-left { }
+.admin-topbar-title {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:22px; letter-spacing:2px; text-transform:uppercase;
+  display:flex; align-items:center; gap:10px;
+}
+.admin-topbar-title .dot {
+  width:8px; height:8px; border-radius:50%; background:var(--accent);
+}
+.admin-topbar-sub { font-size:12px; color:var(--text3); margin-top:2px; letter-spacing:.5px; }
+.admin-x {
+  width:34px; height:34px; border-radius:8px;
+  background:var(--border); border:none; color:var(--text2);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  transition:all .2s;
+}
+.admin-x:hover { background:var(--red); color:#fff; }
+.admin-x svg { width:16px; height:16px; }
+
+.admin-nav {
+  display:flex; gap:1px; padding:0 16px;
+  background:var(--bg3); border-bottom:1px solid var(--border);
+  overflow-x:auto; scrollbar-width:none;
+  transition:background .3s;
+}
+.admin-nav::-webkit-scrollbar { display:none; }
+.anav {
+  padding:12px 16px; cursor:pointer; white-space:nowrap;
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:12px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--text3); border-bottom:2px solid transparent;
+  transition:all .18s; background:none; border-left:none; border-right:none; border-top:none;
+}
+.anav.active { color:var(--accent); border-bottom-color:var(--accent); }
+.anav:hover:not(.active) { color:var(--text2); }
+
+.admin-body { padding:24px; }
+.a-sec { display:none; }
+.a-sec.active { display:block; animation:fadeUp .25s ease; }
+
+/* ADMIN FORMS */
+.fg { margin-bottom:14px; }
+.fg label {
+  display:block; font-family:'Barlow Condensed'; font-weight:700;
+  font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--text3); margin-bottom:6px;
+}
+.fg input, .fg select, .fg textarea {
+  width:100%; padding:10px 14px;
+  background:var(--bg3); border:1px solid var(--border2);
+  border-radius:8px; color:var(--text);
+  font-family:'Barlow'; font-size:13px; outline:none;
+  transition:border .2s, background .3s;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus { border-color:var(--accent); }
+.fg textarea { resize:vertical; min-height:72px; }
+.fg select option { background:var(--bg2); }
+.fgr { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.fgr3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.divider { height:1px; background:var(--border); margin:20px 0; }
+.alert-info {
+  padding:10px 14px; border-radius:8px; font-size:12px; margin-bottom:14px;
+  background:rgba(0,230,118,.06); border:1px solid rgba(0,230,118,.15);
+  color:var(--accent); font-weight:500; letter-spacing:.3px;
+}
+
+/* ADMIN TABLE */
+.a-tbl { width:100%; border-collapse:collapse; }
+.a-tbl thead th {
+  padding:8px 12px; text-align:left;
+  font-family:'Barlow Condensed'; font-weight:700;
+  font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--text3);
+  background:var(--bg3); border-bottom:1px solid var(--border);
+  transition:background .3s;
+}
+.a-tbl tbody td { padding:9px 12px; border-bottom:1px solid var(--border); font-size:12px; }
+.a-tbl tbody tr:last-child td { border-bottom:none; }
+.a-tbl tbody tr:hover td { background:var(--bg3); }
+
+/* LIVE SCORE EDITOR */
+.lse {
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:10px; padding:16px; margin-bottom:12px;
+  transition:background .3s, border .3s;
+}
+.lse-teams {
+  display:flex; align-items:center; gap:10px; margin:12px 0;
+}
+.score-inp {
+  width:58px; text-align:center;
+  background:var(--bg); border:1px solid var(--border2);
+  border-radius:8px; color:var(--text); outline:none;
+  font-family:'Barlow Condensed'; font-weight:900; font-size:30px;
+  padding:6px 4px; transition:border .2s, background .3s;
+}
+.score-inp:focus { border-color:var(--accent); }
+.sc-vs-lbl {
+  font-family:'Barlow Condensed'; font-weight:900;
+  font-size:20px; color:var(--text3); padding:0 4px;
+}
+.sel-compact {
+  padding:5px 9px; border-radius:7px;
+  background:var(--bg4); border:1px solid var(--border);
+  color:var(--text); font-family:'Barlow Condensed'; font-weight:600;
+  font-size:11px; letter-spacing:1px; outline:none;
+  transition:background .3s;
+}
+.sel-compact option { background:var(--bg2); }
+.min-inp {
+  width:62px; padding:5px 8px;
+  background:var(--bg4); border:1px solid var(--border);
+  border-radius:7px; color:var(--text); outline:none;
+  font-family:'Barlow Condensed'; font-weight:700; font-size:15px;
+  text-align:center; transition:background .3s;
+}
+.min-inp:focus { border-color:var(--accent); }
+.ev-inputs {
+  display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;
+}
+.ev-inp-text {
+  flex:1; min-width:120px; padding:6px 10px;
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:7px; color:var(--text); font-family:'Barlow'; font-size:12px; outline:none;
+  transition:background .3s;
+}
+.ev-inp-text:focus { border-color:var(--accent); }
+.ev-inp-num {
+  width:62px; padding:6px 8px;
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:7px; color:var(--text); font-family:'Barlow Condensed'; font-weight:700;
+  font-size:14px; text-align:center; outline:none;
+  transition:background .3s;
+}
+.ev-inp-num:focus { border-color:var(--accent); }
+.events-log {
+  margin-top:10px; display:flex; flex-wrap:wrap; gap:5px;
+}
+.ev-tag {
+  font-size:10px; font-family:'Barlow Condensed'; font-weight:700;
+  letter-spacing:.5px; padding:3px 8px; border-radius:5px;
+  background:var(--bg4); color:var(--text2);
+  display:flex; align-items:center; gap:4px;
+}
+.ev-tag-rm {
+  cursor:pointer; color:var(--red); font-size:13px; line-height:1;
+  background:none; border:none; padding:0;
+}
+
+/* GRP TABLE INLINE INPUTS */
+.grp-inp {
+  width:42px; border:1px solid var(--border);
+  border-radius:5px; padding:2px 3px;
+  text-align:center; font-size:12px; font-weight:600;
+  background:var(--bg); color:var(--text); outline:none;
+  transition:background .3s;
+}
+.grp-inp:focus { border-color:var(--accent); }
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media(max-width:640px){
+  main { padding:14px; }
+  .fgr,.fgr3 { grid-template-columns:1fr; }
+  .hero h1 { font-size:32px; }
+  .mc-score { font-size:36px; }
+  .hero { padding:24px 20px; }
+  .hero-stats { gap:0; }
+  .hero-stat { padding:0 16px 0 0; margin-right:16px; }
+  .hero-stat-val { font-size:26px; }
+  .admin-modal { border-radius:12px; }
+  header { padding:0 14px; }
+  .logo-text { display:none; }
+}
+@media(max-width:400px){
+  .hero-stats { flex-wrap:wrap; gap:14px; }
+  .hero-stat { border-right:none; }
+}
+</style>
+</head>
+<body>
+
+<div id="toast-wrap"></div>
+
+<!-- LOGIN -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="login-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h2>Control Room</h2>
+    <p>Enter your admin password to access the FUNAAB FA Cup control panel.</p>
+    <input type="password" class="login-input" id="login-pw" placeholder="Enter password" />
+    <div class="login-err" id="login-err">Incorrect password. Try again.</div>
+    <div class="login-actions">
+      <button class="btn btn-accent" id="login-submit" style="width:100%">Access Portal</button>
+      <button class="btn btn-ghost" id="login-cancel" style="width:100%">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PORTAL -->
+<div id="admin-overlay">
+  <div class="admin-modal">
+    <div class="admin-topbar">
+      <div class="admin-topbar-left">
+        <div class="admin-topbar-title"><span class="dot"></span> Control Room</div>
+        <div class="admin-topbar-sub">FUNAAB FA Cup 2026 — Admin Panel</div>
+      </div>
+      <button class="admin-x" id="admin-close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="admin-nav" id="admin-nav">
+      <button class="anav active" data-sec="live">Live Scores</button>
+      <button class="anav" data-sec="matches">Matches</button>
+      <button class="anav" data-sec="groups">Group Tables</button>
+      <button class="anav" data-sec="knockout">Knockout</button>
+      <button class="anav" data-sec="notify">Notifications</button>
+      <button class="anav" data-sec="scorers">Scorers</button>
+    </div>
+    <div class="admin-body">
+
+      <!-- LIVE -->
+      <div class="a-sec active" id="a-live">
+
+        <!-- Cloud Sync Setup Card -->
+        <div id="cloud-setup-card" style="background:var(--bg3);border:1px solid var(--border2);border-radius:12px;padding:18px;margin-bottom:18px;transition:background .3s">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+            <div>
+              <div style="font-family:'Barlow Condensed';font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;display:flex;align-items:center;gap:8px">
+                <span id="cloud-status-dot" style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block;flex-shrink:0"></span>
+                Cloud Sync
+              </div>
+              <div id="cloud-status-msg" style="font-size:11px;color:var(--text3);margin-top:3px">Not configured — data only saves on this device</div>
+            </div>
+            <button id="cloud-toggle-btn" style="font-family:'Barlow Condensed';font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--text3);padding:5px 12px;border-radius:6px;cursor:pointer">Setup ▾</button>
+          </div>
+
+          <div id="cloud-form" style="display:none">
+            <div style="background:rgba(41,121,255,.06);border:1px solid rgba(41,121,255,.15);border-radius:8px;padding:12px;margin-bottom:14px;font-size:12px;color:var(--text2);line-height:1.9">
+              <b style="color:#2979FF;font-family:'Barlow Condensed';letter-spacing:.5px">SETUP (once only):</b><br>
+              1. Go to <a href="https://jsonbin.io" target="_blank" style="color:var(--accent)">jsonbin.io</a> → Sign up free<br>
+              2. Click <b style="color:var(--text)">+ Create Bin</b> → type <code style="color:var(--accent)">{}</code> → Save<br>
+              3. Copy the <b style="color:var(--text)">Bin ID</b> from the URL bar (the long number at the end)<br>
+              4. Go to <b style="color:var(--text)">Account → API Keys</b> → Create key → copy it<br>
+              5. Paste both below and tap <b style="color:var(--accent)">Connect</b>
+            </div>
+            <div class="fg"><label>Bin ID</label><input id="cloud-bin-id" placeholder="e.g. 6615a2f5acd3cb34a83e5f12" style="font-family:monospace;font-size:12px" /></div>
+            <div class="fg"><label>API Key</label><input id="cloud-api-key" placeholder="e.g. $2a$10$abc..." style="font-family:monospace;font-size:12px" type="password" /></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-accent" id="cloud-connect-btn">Connect & Sync</button>
+              <button class="btn btn-ghost btn-sm" id="cloud-test-btn">Test Connection</button>
+              <button class="btn btn-danger btn-sm" id="cloud-disconnect-btn" style="display:none">Disconnect</button>
+            </div>
+            <div id="cloud-test-result" style="margin-top:10px;font-size:12px;display:none"></div>
+          </div>
+        </div>
+
+        <div class="alert-info">Changes to scores and status update the public view instantly when you close this panel.</div>
+        <div id="live-list"></div>
+      </div>
+
+      <!-- MATCHES -->
+      <div class="a-sec" id="a-matches">
+        <h3 style="font-family:'Barlow Condensed';font-weight:800;font-size:16px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">Schedule New Match</h3>
+        <div class="fgr">
+          <div class="fg"><label>Home Team</label><input id="m-home" placeholder="e.g. Computer Sci FC" /></div>
+          <div class="fg"><label>Away Team</label><input id="m-away" placeholder="e.g. Agriculture FC" /></div>
+        </div>
+        <div class="fgr">
+          <div class="fg"><label>Home Abbrev.</label><input id="m-ha" placeholder="CSC" maxlength="4" /></div>
+          <div class="fg"><label>Away Abbrev.</label><input id="m-aa" placeholder="AGR" maxlength="4" /></div>
+        </div>
+        <div class="fgr">
+          <div class="fg"><label>Date</label><input type="date" id="m-date" /></div>
+          <div class="fg"><label>Time</label><input type="time" id="m-time" /></div>
+        </div>
+        <div class="fgr">
+          <div class="fg"><label>Venue</label><input id="m-venue" placeholder="FUNAAB Main Pitch" /></div>
+          <div class="fg"><label>Stage</label>
+            <select id="m-stage">
+              <option>Group Stage</option><option>Round of 16</option>
+              <option>Quarter Final</option><option>Semi Final</option><option>Final</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg" style="max-width:240px"><label>Status</label>
+          <select id="m-status">
+            <option value="upcoming">Upcoming</option>
+            <option value="live">Live</option>
+            <option value="finished">Finished</option>
+          </select>
+        </div>
+        <button class="btn btn-accent" id="add-match-btn">Add Match</button>
+        <div class="divider"></div>
+        <h3 style="font-family:'Barlow Condensed';font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px">All Scheduled Matches</h3>
+        <table class="a-tbl">
+          <thead><tr><th>Home</th><th>Away</th><th>Date / Time</th><th>Venue</th><th>Stage</th><th>Status</th><th></th></tr></thead>
+          <tbody id="m-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- GROUPS -->
+      <div class="a-sec" id="a-groups">
+        <div class="alert-info">All cells are editable inline. Click any stat field to update it directly.</div>
+        <div id="groups-edit"></div>
+        <div class="divider"></div>
+        <h3 style="font-family:'Barlow Condensed';font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">Add Team to Group</h3>
+        <div class="fgr">
+          <div class="fg"><label>Group</label>
+            <select id="g-grp"><option>Group A</option><option>Group B</option><option>Group C</option><option>Group D</option></select>
+          </div>
+          <div class="fg"><label>Team Name</label><input id="g-name" placeholder="Pharmacy United" /></div>
+        </div>
+        <div class="fg" style="max-width:200px"><label>Abbreviation</label><input id="g-abbr" placeholder="PHU" maxlength="4" /></div>
+        <button class="btn btn-accent" id="add-grp-btn">Add Team</button>
+      </div>
+
+      <!-- KNOCKOUT -->
+      <div class="a-sec" id="a-knockout">
+        <div class="alert-info">Edit team names and scores for each knockout stage match.</div>
+        <div id="ko-edit"></div>
+      </div>
+
+      <!-- NOTIFY -->
+      <div class="a-sec" id="a-notify">
+
+        <!-- Status Row -->
+        <div class="push-status-row" id="push-status-row">
+          <span class="push-dot ok" id="push-status-dot"></span>
+          <div>
+            <div id="push-status-text" style="font-family:'Barlow Condensed';font-weight:700;font-size:13px;letter-spacing:.5px">Broadcast channel active — ready to send.</div>
+            <div class="push-channel-info" id="push-channel-info">All users who tapped Allow are subscribed automatically.</div>
+          </div>
+        </div>
+
+        <!-- How it works — admin only info -->
+        <div style="background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.15);border-radius:10px;padding:14px;margin-bottom:20px">
+          <div style="font-family:'Barlow Condensed';font-weight:800;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:8px">⚡ How It Works</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.8">
+            Users open the site → <b style="color:var(--text)">Allow Notifications banner appears</b> → they tap Allow → <b style="color:var(--text)">subscribed instantly.</b><br>
+            No channel ID, no signup, no extra steps for users. You just broadcast below.
+          </div>
+        </div>
+
+        <!-- Broadcast -->
+        <h3 style="font-family:'Barlow Condensed';font-weight:800;font-size:16px;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">Broadcast Notification</h3>
+        <p style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.5">Sends a real push notification to <b style="color:var(--text2)">every subscribed phone</b> — including locked screens.</p>
+
+        <!-- Page target -->
+        <div style="font-family:'Barlow Condensed';font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Opens Page On Tap</div>
+        <div class="push-target-tabs" id="push-target-tabs">
+          <button class="ptab active" data-page="">Home</button>
+          <button class="ptab" data-page="matches">Fixtures</button>
+          <button class="ptab" data-page="standings">Standings</button>
+          <button class="ptab" data-page="bracket">Bracket</button>
+          <button class="ptab" data-page="scorers">Top Scorers</button>
+        </div>
+
+        <div class="fg" style="max-width:280px"><label>Alert Type</label>
+          <select id="n-type">
+            <option value="goal">⚽ Goal Scored</option>
+            <option value="red-card">🟥 Red Card</option>
+            <option value="info">📢 General Update</option>
+            <option value="match">📅 Match Reminder</option>
+          </select>
+        </div>
+        <div class="fg"><label>Title</label><input id="n-title" placeholder="e.g. FULL TIME — Eagles FC 2-1 Panthers FC" /></div>
+        <div class="fg"><label>Message</label><textarea id="n-body" placeholder="Write the notification message here..."></textarea></div>
+        <button class="btn btn-accent" id="send-notif-btn" style="display:flex;align-items:center;gap:8px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+          Broadcast to All Users
+        </button>
+
+        <div class="divider"></div>
+
+        <!-- Quick Goal -->
+        <h3 style="font-family:'Barlow Condensed';font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px">⚡ Quick Goal Alert</h3>
+        <div class="fgr3">
+          <div class="fg"><label>Player Name</label><input id="qn-scorer" placeholder="John Doe" /></div>
+          <div class="fg"><label>Team</label><input id="qn-team" placeholder="Eagles FC" /></div>
+          <div class="fg"><label>Minute</label><input type="number" id="qn-min" placeholder="55" min="1" max="120" /></div>
+        </div>
+        <button class="btn btn-accent" id="quick-goal-btn">Send Goal Alert</button>
+
+      </div>
+
+      <!-- SCORERS -->
+      <div class="a-sec" id="a-scorers">
+        <h3 style="font-family:'Barlow Condensed';font-weight:800;font-size:16px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px">Add / Update Scorer</h3>
+        <div class="fgr">
+          <div class="fg"><label>Player Name</label><input id="sc-name" placeholder="John Doe" /></div>
+          <div class="fg"><label>Team</label><input id="sc-team" placeholder="Eagles FC" /></div>
+        </div>
+        <div class="fgr">
+          <div class="fg"><label>Goals</label><input type="number" id="sc-goals" placeholder="5" min="0" /></div>
+          <div class="fg"><label>Abbrev. / Initials</label><input id="sc-abbr" placeholder="JD" maxlength="3" /></div>
+        </div>
+        <button class="btn btn-accent" id="add-sc-btn">Save Scorer</button>
+        <div class="divider"></div>
+        <div id="sc-edit"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- PUSH NOTIFICATION PERMISSION BANNER -->
+<div id="push-banner">
+  <div class="push-banner-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+    </svg>
+  </div>
+  <div class="push-banner-text">
+    <div class="push-banner-title">Stay in the Loop ⚽</div>
+    <div class="push-banner-sub">Get instant alerts for goals, red cards and match updates — even when your screen is locked.</div>
+    <div class="push-banner-actions">
+      <button class="push-allow-btn" id="push-allow-btn">Allow Notifications</button>
+      <button class="push-deny-btn" id="push-deny-btn">Not Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- APP SHELL -->
+<div style="display:flex;flex-direction:column;min-height:100vh">
+  <header>
+    <a class="logo" href="#" id="logo-link">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M12 3c0 0-2 4-2 9s2 9 2 9M3 12h18M5.6 6.5s3 1.5 6.4 1.5 6.4-1.5 6.4-1.5M5.6 17.5s3-1.5 6.4-1.5 6.4 1.5 6.4 1.5"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">FUNAAB</span>
+        <span class="logo-sub">FA Cup 2026</span>
+      </div>
+    </a>
+    <div class="header-right">
+      <div class="live-pill" id="live-badge">
+        <span class="dot"></span> LIVE
+      </div>
+      <div id="sync-dot" title="Syncing..." style="width:8px;height:8px;border-radius:50%;background:var(--amber);flex-shrink:0;transition:background .4s;cursor:default"></div>
+      <button class="theme-btn" id="theme-toggle" title="Toggle theme">
+        <svg id="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        </svg>
+        <svg id="theme-icon-light" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <button class="admin-btn" id="admin-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 1 0 4.93 19.07 10 10 0 0 0 19.07 4.93z"/><path d="M12 8v1M12 15v1M8 12H9M15 12h1"/></svg>
+        Admin
+      </button>
+    </div>
+  </header>
+
+  <div class="nav-strip" id="nav-strip">
+    <div class="tab active" data-page="home">Home</div>
+    <div class="tab" data-page="matches">Fixtures</div>
+    <div class="tab" data-page="standings">Standings</div>
+    <div class="tab" data-page="bracket">Bracket</div>
+    <div class="tab" data-page="scorers">Top Scorers</div>
+  </div>
+
+  <main>
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="hero">
+        <div class="hero-bg">
+          <div class="hero-bg-line"></div>
+          <div class="hero-bg-line"></div>
+          <div class="hero-bg-line"></div>
+          <div class="hero-grid-text">2026</div>
+        </div>
+        <div class="hero-eyebrow">FUNAAB — Abeokuta</div>
+        <h1>FA <em>Cup</em> 2026</h1>
+        <p class="hero-desc">Funaab football. Track live scores, standings and match events.</p>
+        <div class="hero-stats" id="hero-stats">
+          <div class="hero-stat"><div class="hero-stat-val" id="stat-teams">0</div><div class="hero-stat-lbl">Teams</div></div>
+          <div class="hero-stat"><div class="hero-stat-val" id="stat-matches">0</div><div class="hero-stat-lbl">Matches</div></div>
+          <div class="hero-stat"><div class="hero-stat-val" id="stat-goals"><span>0</span></div><div class="hero-stat-lbl">Goals</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:4px">
+        <div class="sec-head" id="sec-live-head" style="display:none">
+          <div class="sec-title">Live Now</div>
+          <div class="sec-line"></div>
+        </div>
+        <div id="home-live"></div>
+      </div>
+
+      <div style="margin-top:20px">
+        <div class="sec-head">
+          <div class="sec-title">Recent Results</div>
+          <div class="sec-line"></div>
+        </div>
+        <div id="home-recent"></div>
+      </div>
+
+      <div style="margin-top:20px">
+        <div class="sec-head">
+          <div class="sec-title">Upcoming</div>
+          <div class="sec-line"></div>
+        </div>
+        <div id="home-upcoming"></div>
+      </div>
+    </div>
+
+    <!-- FIXTURES -->
+    <div class="page" id="page-matches">
+      <div class="sec-head">
+        <div class="sec-title">All Fixtures</div>
+        <div class="sec-line"></div>
+      </div>
+      <div class="filter-bar" id="filter-bar">
+        <button class="fbtn active" data-f="all">All</button>
+        <button class="fbtn" data-f="live">Live</button>
+        <button class="fbtn" data-f="upcoming">Upcoming</button>
+        <button class="fbtn" data-f="finished">Finished</button>
+      </div>
+      <div id="fixtures"></div>
+    </div>
+
+    <!-- STANDINGS -->
+    <div class="page" id="page-standings">
+      <div class="sec-head">
+        <div class="sec-title">Group Standings</div>
+        <div class="sec-line"></div>
+      </div>
+      <div id="groups-view"></div>
+    </div>
+
+    <!-- BRACKET -->
+    <div class="page" id="page-bracket">
+      <div class="sec-head">
+        <div class="sec-title">Knockout Bracket</div>
+        <div class="sec-line"></div>
+      </div>
+      <div id="bracket-view"></div>
+    </div>
+
+    <!-- SCORERS -->
+    <div class="page" id="page-scorers">
+      <div class="sec-head">
+        <div class="sec-title">Top Scorers</div>
+        <div class="sec-line"></div>
+      </div>
+      <div class="scorers-wrap" id="scorers-view"></div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ─── STORE ─────────────────────────────────────── */
+// Cloud credentials stored in localStorage — admin enters them once inside the app.
+const SYNC_INTERVAL = 20000; // viewers auto-refresh every 20s
+let syncTimer    = null;
+let isSaving     = false;
+let lastSaveHash = '';
+
+function getCredentials(){
+  try{
+    return {
+      binId:  localStorage.getItem('funaab_bin_id')||'69a32436ae596e708f52c8f4',
+      apiKey: localStorage.getItem('funaab_api_key')||'$2a$10$7P7BU2SqnDSRtT3zMwItIuR.VpFWI663Im/L5GgTF6ZPFpTG48L0C'
+    };
+  }catch(e){ return {binId:'69a32436ae596e708f52c8f4',apiKey:'$2a$10$7P7BU2SqnDSRtT3zMwItIuR.VpFWI663Im/L5GgTF6ZPFpTG48L0C'}; }
+}
+function setCredentials(binId, apiKey){
+  try{
+    localStorage.setItem('funaab_bin_id', binId.trim());
+    localStorage.setItem('funaab_api_key', apiKey.trim());
+  }catch(e){}
+}
+function cloudConfigured(){
+  const c = getCredentials();
+  return c.binId.length > 5 && c.apiKey.length > 5;
+}
+function getCloudURL(){
+  return 'https://api.jsonbin.io/v3/b/' + getCredentials().binId;
+}
+
+const DEFAULTS = {
+  matches:[],
+  groups:{'Group A':[],'Group B':[],'Group C':[],'Group D':[]},
+  knockout:[
+    {round:'Quarter Final',matches:[
+      {home:'TBD',away:'TBD',haHome:'TBD',haAway:'TBD',homeScore:0,awayScore:0,status:'upcoming'},
+      {home:'TBD',away:'TBD',haHome:'TBD',haAway:'TBD',homeScore:0,awayScore:0,status:'upcoming'},
+      {home:'TBD',away:'TBD',haHome:'TBD',haAway:'TBD',homeScore:0,awayScore:0,status:'upcoming'},
+      {home:'TBD',away:'TBD',haHome:'TBD',haAway:'TBD',homeScore:0,awayScore:0,status:'upcoming'},
+    ]},
+    {round:'Semi Final',matches:[
+      {home:'TBD',away:'TBD',haHome:'TBD',haAway:'TBD',homeScore:0,awayScore:0,status:'upcoming'},
+      {home:'TBD',away:'TBD',haHome:'TBD',haAway:'TBD',homeScore:0,awayScore:0,status:'upcoming'},
+    ]},
+    {round:'Final',matches:[
+      {home:'TBD',away:'TBD',haHome:'TBD',haAway:'TBD',homeScore:0,awayScore:0,status:'upcoming'},
+    ]}
+  ],
+  scorers:[]
+};
+
+let S = JSON.parse(JSON.stringify(DEFAULTS));
+
+function sanitize(data){
+  S = Object.assign({}, DEFAULTS, data);
+  if(!S.groups||typeof S.groups!=='object') S.groups = JSON.parse(JSON.stringify(DEFAULTS.groups));
+  if(!Array.isArray(S.knockout)||!S.knockout.length) S.knockout = JSON.parse(JSON.stringify(DEFAULTS.knockout));
+  if(!Array.isArray(S.matches))  S.matches  = [];
+  if(!Array.isArray(S.scorers))  S.scorers  = [];
+}
+
+function loadLocal(){
+  try{
+    const sv = localStorage.getItem('funaab_v5');
+    if(sv) sanitize(JSON.parse(sv));
+  }catch(e){}
+}
+function saveLocal(){
+  try{ localStorage.setItem('funaab_v5', JSON.stringify(S)); }catch(e){}
+}
+
+async function fetchCloud(){
+  if(!cloudConfigured()) return;
+  try{
+    const c = getCredentials();
+    const res = await fetch(getCloudURL()+'/latest',{
+      headers:{'X-Master-Key':c.apiKey,'X-Bin-Meta':'false'}
+    });
+    if(!res.ok) return;
+    const data = await res.json();
+    if(data && typeof data==='object'){
+      sanitize(data);
+      saveLocal();
+      renderAll();
+      updateLiveBadge();
+    }
+  }catch(e){}
+}
+
+async function saveCloud(){
+  saveLocal();
+  if(!cloudConfigured()) return;
+  const json = JSON.stringify(S);
+  if(json === lastSaveHash) return;
+  lastSaveHash = json;
+  isSaving = true; updateSyncIndicator();
+  try{
+    const c = getCredentials();
+    await fetch(getCloudURL(),{
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':c.apiKey,'X-Bin-Versioning':'false'},
+      body: json
+    });
+  }catch(e){}
+  isSaving = false; updateSyncIndicator();
+}
+
+function save(){ saveCloud(); }
+
+function updateSyncIndicator(){
+  const el = document.getElementById('sync-dot');
+  if(!el) return;
+  if(!cloudConfigured()){
+    el.style.background='var(--amber)'; el.title='Cloud sync not set up';
+  } else if(isSaving){
+    el.style.background='var(--amber)'; el.title='Saving to cloud…';
+  } else {
+    el.style.background='var(--accent)'; el.title='Synced ✓';
+  }
+}
+
+function startAutoSync(){
+  if(syncTimer) clearInterval(syncTimer);
+  syncTimer = setInterval(fetchCloud, SYNC_INTERVAL);
+}
+
+// Initial load — show local data immediately, then fetch cloud
+loadLocal();
+
+/* ─── THEME ─────────────────────────────────────── */
+let theme = localStorage.getItem('funaab_theme')||'dark';
+document.documentElement.setAttribute('data-theme',theme);
+function updateThemeIcon(){
+  document.getElementById('theme-icon-dark').style.display = theme==='dark'?'block':'none';
+  document.getElementById('theme-icon-light').style.display = theme==='light'?'block':'none';
+}
+updateThemeIcon();
+document.getElementById('theme-toggle').addEventListener('click',function(){
+  theme = theme==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',theme);
+  localStorage.setItem('funaab_theme',theme);
+  updateThemeIcon();
+});
+document.getElementById('logo-link').addEventListener('click',e=>e.preventDefault());
+
+/* ─── TOASTS ─────────────────────────────────────── */
+function toast(title, body, type='info'){
+  const wrap = document.getElementById('toast-wrap');
+  const el = document.createElement('div');
+  el.className='toast '+type;
+  el.innerHTML=`<div class="toast-dot"></div>
+    <div class="toast-content">
+      <div class="toast-title">${title}</div>
+      <div class="toast-body">${body}</div>
+    </div>
+    <button class="toast-close">&#x2715;</button>`;
+  el.querySelector('.toast-close').addEventListener('click',()=>el.remove());
+  wrap.appendChild(el);
+  setTimeout(()=>{
+    el.style.animation='slideOutRight .35s cubic-bezier(.25,.46,.45,.94) forwards';
+    setTimeout(()=>el.remove(),350);
+  },5500);
+}
+
+/* ─── HELPERS ────────────────────────────────────── */
+function $$(id){return document.getElementById(id);}
+function qs(sel,ctx){return(ctx||document).querySelector(sel);}
+function qsa(sel,ctx){return(ctx||document).querySelectorAll(sel);}
+function val(id){const e=$$(id);return e?e.value.trim():'';}
+function setHTML(id,html){const e=$$(id);if(e)e.innerHTML=html;}
+function abbr(name){
+  if(!name)return'??';
+  const parts=name.toUpperCase().split(/[\s\-_]+/).filter(Boolean);
+  if(parts.length>=3)return(parts[0][0]+parts[1][0]+parts[2][0]);
+  if(parts.length===2)return(parts[0][0]+parts[1][0]+parts[1][1]||'').substring(0,3);
+  return name.substring(0,3).toUpperCase();
+}
+function emptyState(title,msg){
+  return `<div class="empty-state">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/>
+    </svg>
+    <h3>${title}</h3>
+    <p>${msg}</p>
+  </div>`;
+}
+
+/* ─── MATCH CARD ─────────────────────────────────── */
+function matchCard(m, delay=0){
+  const sc = m.status==='live'?'live':m.status==='finished'?'finished':'upcoming';
+  const sl = m.status==='live'?'Live':m.status==='finished'?'Full Time':'Upcoming';
+  const ha = m.haHome||abbr(m.home);
+  const aa = m.haAway||abbr(m.away);
+  const scoreHTML = m.status!=='upcoming'
+    ?`<div class="mc-score">${m.homeScore||0}<span class="sc-sep"> : </span>${m.awayScore||0}</div>`
+    :`<div class="mc-vs">VS</div>`;
+  const evts = (m.events||[]).map(ev=>{
+    const icons={
+      goal:`<svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></svg>`,
+      yellow:`<svg viewBox="0 0 24 24" fill="var(--amber)" stroke="none"><rect x="5" y="2" width="14" height="20" rx="3"/></svg>`,
+      red:`<svg viewBox="0 0 24 24" fill="var(--red)" stroke="none"><rect x="5" y="2" width="14" height="20" rx="3"/></svg>`
+    };
+    return `<div class="event-row">
+      <span class="ev-min">${ev.minute}'</span>
+      <span class="ev-type ${ev.type}">${icons[ev.type]||''}</span>
+      <span class="ev-player">${ev.player}</span>
+      <span class="ev-team">${ev.team}</span>
+    </div>`;
+  }).join('');
+
+  return `<div class="match-card" style="animation-delay:${delay}ms">
+    <div class="mc-top">
+      <span class="mc-stage">${m.stage||'Group Stage'}</span>
+      <span class="mc-badge ${sc}">${sl}</span>
+    </div>
+    <div class="mc-body">
+      <div class="mc-team home">
+        <div class="mc-team-crest">${ha}</div>
+        <div class="mc-team-name">${m.home}</div>
+        <div class="mc-team-label">Home</div>
+      </div>
+      <div class="mc-center">
+        ${scoreHTML}
+        ${m.status==='live'?`<div class="mc-minute">${m.minute||0}'</div>`:''}
+      </div>
+      <div class="mc-team away">
+        <div class="mc-team-crest">${aa}</div>
+        <div class="mc-team-name">${m.away}</div>
+        <div class="mc-team-label">Away</div>
+      </div>
+    </div>
+    <div class="mc-footer">
+      <span class="mc-footer-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        ${m.venue||'Venue TBD'}
+      </span>
+      <span class="mc-footer-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        ${m.date?m.date+' ':''} ${m.time||'Time TBD'}
+      </span>
+    </div>
+    ${evts?`<div class="events-strip">${evts}</div>`:''}
+  </div>`;
+}
+
+/* ─── PUBLIC RENDERS ─────────────────────────────── */
+function renderAll(){
+  renderHome(); renderFixtures(); renderGroups(); renderBracket(); renderScorers();
+  updateLiveBadge(); renderHeroStats();
+}
+
+function updateLiveBadge(){
+  const hasLive = S.matches.some(m=>m.status==='live');
+  $$('live-badge').style.display = hasLive?'flex':'none';
+}
+
+function renderHeroStats(){
+  const teams=new Set();
+  Object.values(S.groups||{}).forEach(g=>g.forEach(t=>teams.add(t.name)));
+  const goals=S.matches.reduce((a,m)=>m.status!=='upcoming'?a+(m.homeScore||0)+(m.awayScore||0):a,0);
+  $$('stat-teams').textContent=teams.size;
+  $$('stat-matches').textContent=S.matches.length;
+  $$('stat-goals').innerHTML=`<span>${goals}</span>`;
+}
+
+function renderHome(){
+  const live=S.matches.filter(m=>m.status==='live');
+  const fin=S.matches.filter(m=>m.status==='finished').slice(-5);
+  const up=S.matches.filter(m=>m.status==='upcoming').slice(0,3);
+  const liveHead=$$('sec-live-head');
+  if(liveHead)liveHead.style.display=live.length?'flex':'none';
+  setHTML('home-live',live.map((m,i)=>matchCard(m,i*60)).join(''));
+  setHTML('home-recent',fin.length?fin.map((m,i)=>matchCard(m,i*60)).join(''):emptyState('No Recent Results','Results will appear here after matches are played.'));
+  setHTML('home-upcoming',up.length?up.map((m,i)=>matchCard(m,i*60)).join(''):emptyState('No Upcoming Matches','Check back soon — fixtures will be added shortly.'));
+}
+
+let curFilter='all';
+function renderFixtures(f){
+  if(f)curFilter=f;
+  const list=curFilter==='all'?S.matches:S.matches.filter(m=>m.status===curFilter);
+  setHTML('fixtures',list.length?list.map((m,i)=>matchCard(m,i*50)).join(''):emptyState('No Matches Found','Try a different filter or check back later.'));
+}
+
+function renderGroups(){
+  const el=$$('groups-view');if(!el)return;
+  let html='';
+  for(const[gName,teams]of Object.entries(S.groups||{})){
+    if(!teams.length)continue;
+    const sorted=[...teams].sort((a,b)=>(b.pts||0)-(a.pts||0)||((b.gf||0)-(b.ga||0))-((a.gf||0)-(a.ga||0))||(b.gf||0)-(a.gf||0));
+    html+=`<div class="group-block">
+      <div class="group-header">
+        <div>
+          <div class="group-header-name">${gName}</div>
+          <div class="group-header-sub">Top 2 qualify to knockout stage</div>
+        </div>
+        <div class="qualify-badge">Qualifying</div>
+      </div>
+      <div class="standings-wrap">
+        <table class="st">
+          <thead><tr><th>#</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th><th>Form</th></tr></thead>
+          <tbody>${sorted.map((t,i)=>{
+            const gd=(t.gf||0)-(t.ga||0);
+            const posClass=i===0?'q':i===1?'q':'';
+            return`<tr>
+              <td><div class="pos-num ${posClass}">${i+1}</div></td>
+              <td><div class="team-cell">
+                <div class="team-abbr">${t.abbr||abbr(t.name)}</div>
+                ${t.name}
+              </div></td>
+              <td>${t.p||0}</td><td>${t.w||0}</td><td>${t.d||0}</td><td>${t.l||0}</td>
+              <td>${t.gf||0}</td><td>${t.ga||0}</td>
+              <td style="font-weight:700;color:${gd>0?'var(--accent)':gd<0?'var(--red)':'var(--text3)'}">${gd>0?'+':''}${gd}</td>
+              <td><span class="pts-bold">${t.pts||0}</span></td>
+              <td><div class="form-row">${(t.form||[]).slice(-5).map(r=>`<div class="form-dot ${r}">${r.toUpperCase()}</div>`).join('')}</div></td>
+            </tr>`;
+          }).join('')}</tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+  el.innerHTML=html||emptyState('No Groups Yet','Add teams via Admin → Group Tables.');
+}
+
+function renderBracket(){
+  const el=$$('bracket-view');if(!el)return;
+  if(!S.knockout||!S.knockout.length){el.innerHTML=emptyState('Bracket Coming Soon','Knockout stage will be set up once the group stage concludes.');return;}
+  el.innerHTML=`<div class="bracket-wrap">
+    <div class="bracket-scroll">
+      <div class="bracket-grid">
+        ${S.knockout.map(r=>`<div class="b-round">
+          <div class="b-round-head">${r.round}</div>
+          <div class="b-round-matches">
+            ${r.matches.map(m=>`<div class="b-match">
+              <div class="b-row ${m.status==='finished'&&m.homeScore>m.awayScore?'winner':''}">
+                <span>${m.home}</span>
+                <span class="b-row-score">${m.status!=='upcoming'?m.homeScore:'-'}</span>
+              </div>
+              <div class="b-row ${m.status==='finished'&&m.awayScore>m.homeScore?'winner':''}">
+                <span>${m.away}</span>
+                <span class="b-row-score">${m.status!=='upcoming'?m.awayScore:'-'}</span>
+              </div>
+            </div>`).join('')}
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderScorers(){
+  const el=$$('scorers-view');if(!el)return;
+  if(!S.scorers||!S.scorers.length){el.innerHTML=`<div style="padding:20px">`+emptyState('No Scorers Yet','Scorers will be added by the admin after goals are recorded.')+`</div>`;return;}
+  const sorted=[...S.scorers].sort((a,b)=>b.goals-a.goals);
+  const max=sorted[0]?.goals||1;
+  el.innerHTML=sorted.map((s,i)=>{
+    const rankClass=i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    return`<div class="scorer-row" style="animation-delay:${i*60}ms">
+      <div class="sc-rank ${rankClass}">${i+1}</div>
+      <div class="sc-avatar">${s.abbr||abbr(s.name)}</div>
+      <div class="sc-info">
+        <div class="sc-name">${s.name}</div>
+        <div class="sc-team">${s.team}</div>
+        <div class="goals-bar"><div class="goals-bar-fill" style="width:${Math.round((s.goals/max)*100)}%"></div></div>
+      </div>
+      <div class="sc-goals-badge">${s.goals}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ─── ADMIN RENDERS ──────────────────────────────── */
+function renderAdminLive(){
+  const el=$$('live-list');if(!el)return;
+  const list=S.matches;
+  if(!list.length){el.innerHTML='<p style="color:var(--text3);font-size:13px;font-weight:500">No matches yet. Add matches in the Matches tab.</p>';return;}
+  el.innerHTML=list.map(m=>{
+    const idx=S.matches.indexOf(m);
+    const evLogs=(m.events||[]).map((ev,ei)=>`<span class="ev-tag">${ev.minute}' ${ev.type==='goal'?'G':ev.type==='red'?'R':'Y'} — ${ev.player} <button class="ev-tag-rm rm-ev" data-idx="${idx}" data-ei="${ei}">&#x2715;</button></span>`).join('');
+    return`<div class="lse">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        <b style="font-family:'Barlow Condensed';font-weight:800;font-size:15px;letter-spacing:.5px;text-transform:uppercase">${m.home} vs ${m.away}</b>
+        <select class="sel-compact ls-status" data-idx="${idx}">
+          <option value="upcoming" ${m.status==='upcoming'?'selected':''}>Upcoming</option>
+          <option value="live" ${m.status==='live'?'selected':''}>Live</option>
+          <option value="finished" ${m.status==='finished'?'selected':''}>Full Time</option>
+        </select>
+      </div>
+      <div class="lse-teams">
+        <span style="font-weight:700;flex:1;text-align:right;font-size:13px;padding-right:8px">${m.home}</span>
+        <input type="number" class="score-inp ls-score" data-idx="${idx}" data-f="homeScore" value="${m.homeScore||0}" min="0" />
+        <span class="sc-vs-lbl"> : </span>
+        <input type="number" class="score-inp ls-score" data-idx="${idx}" data-f="awayScore" value="${m.awayScore||0}" min="0" />
+        <span style="font-weight:700;flex:1;padding-left:8px;font-size:13px">${m.away}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span style="font-family:'Barlow Condensed';font-weight:700;font-size:11px;letter-spacing:2px;color:var(--text3)">MINUTE</span>
+        <input type="number" class="min-inp ls-min" data-idx="${idx}" value="${m.minute||0}" min="0" max="120" />
+        <span style="color:var(--text3);font-size:12px;font-weight:600">'</span>
+      </div>
+      <div style="font-family:'Barlow Condensed';font-weight:700;font-size:11px;letter-spacing:2px;color:var(--text3);margin-bottom:7px">ADD MATCH EVENT</div>
+      <div class="ev-inputs">
+        <input class="ev-inp-text ev-pl" data-idx="${idx}" placeholder="Player name" />
+        <input type="number" class="ev-inp-num ev-mn" data-idx="${idx}" placeholder="Min" />
+        <select class="sel-compact ev-ty" data-idx="${idx}">
+          <option value="goal">Goal</option>
+          <option value="yellow">Yellow Card</option>
+          <option value="red">Red Card</option>
+        </select>
+        <select class="sel-compact ev-tm" data-idx="${idx}">
+          <option value="${m.home}">${m.home}</option>
+          <option value="${m.away}">${m.away}</option>
+        </select>
+        <button class="btn btn-accent btn-sm add-ev" data-idx="${idx}">Add</button>
+      </div>
+      ${evLogs?`<div class="events-log">${evLogs}</div>`:''}
+    </div>`;
+  }).join('');
+
+  qsa('.ls-status',el).forEach(sel=>sel.addEventListener('change',function(){
+    S.matches[+this.dataset.idx].status=this.value;save();updateLiveBadge();renderAdminLive();
+  }));
+  qsa('.ls-score',el).forEach(inp=>inp.addEventListener('change',function(){
+    S.matches[+this.dataset.idx][this.dataset.f]=parseInt(this.value)||0;save();
+  }));
+  qsa('.ls-min',el).forEach(inp=>inp.addEventListener('change',function(){
+    S.matches[+this.dataset.idx].minute=parseInt(this.value)||0;save();
+  }));
+  qsa('.add-ev',el).forEach(btn=>btn.addEventListener('click',function(){
+    const idx=+this.dataset.idx;
+    const player=el.querySelector(`.ev-pl[data-idx="${idx}"]`).value.trim();
+    const minute=parseInt(el.querySelector(`.ev-mn[data-idx="${idx}"]`).value)||0;
+    const type=el.querySelector(`.ev-ty[data-idx="${idx}"]`).value;
+    const team=el.querySelector(`.ev-tm[data-idx="${idx}"]`).value;
+    if(!player)return;
+    if(!S.matches[idx].events)S.matches[idx].events=[];
+    S.matches[idx].events.push({player,minute,type,team});
+    S.matches[idx].events.sort((a,b)=>a.minute-b.minute);
+    save();
+    if(type==='goal')toast('Goal Scored',`${player} scores at ${minute}' for ${team}`,'goal');
+    if(type==='red')toast('Red Card',`${player} (${team}) sent off at ${minute}'`,'red-card');
+    renderAdminLive();
+  }));
+  qsa('.rm-ev',el).forEach(btn=>btn.addEventListener('click',function(){
+    S.matches[+this.dataset.idx].events.splice(+this.dataset.ei,1);save();renderAdminLive();
+  }));
+}
+
+function renderAdminMatchesTable(){
+  setHTML('m-tbody',S.matches.map((m,i)=>`<tr>
+    <td style="font-weight:700">${m.home}</td>
+    <td style="font-weight:700">${m.away}</td>
+    <td style="white-space:nowrap;color:var(--text2)">${m.date||'—'} ${m.time||''}</td>
+    <td style="color:var(--text2)">${m.venue||'—'}</td>
+    <td style="color:var(--text2)">${m.stage||'—'}</td>
+    <td><span style="font-family:'Barlow Condensed';font-weight:700;font-size:10px;letter-spacing:1px;padding:2px 8px;border-radius:4px;background:var(--bg4);color:var(--text2)">${m.status}</span></td>
+    <td><button class="btn btn-danger btn-sm rm-match" data-i="${i}">Remove</button></td>
+  </tr>`).join('')||'<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:20px;font-weight:600">No matches scheduled yet</td></tr>');
+  qsa('.rm-match',$$('m-tbody')).forEach(btn=>btn.addEventListener('click',function(){
+    if(confirm('Remove this match?')){S.matches.splice(+this.dataset.i,1);save();renderAdminMatchesTable();renderAdminLive();}
+  }));
+}
+
+function renderAdminGroups(){
+  const el=$$('groups-edit');if(!el)return;
+  let html='';
+  for(const[gName,teams]of Object.entries(S.groups||{})){
+    html+=`<div style="margin-bottom:20px">
+      <div style="font-family:'Barlow Condensed';font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;color:var(--accent)">${gName}</div>
+      ${teams.length?`<table class="a-tbl">
+        <thead><tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>Pts</th><th>Form</th><th></th></tr></thead>
+        <tbody>${teams.map((t,i)=>`<tr>
+          <td style="font-weight:700">${t.abbr||abbr(t.name)} — ${t.name}</td>
+          ${['p','w','d','l','gf','ga','pts'].map(f=>`<td><input type="number" value="${t[f]||0}" min="0"
+            class="grp-inp gi" data-g="${gName}" data-i="${i}" data-f="${f}" /></td>`).join('')}
+          <td><select class="sel-compact gf-sel" data-g="${gName}" data-i="${i}">
+            <option value="">+ Form</option><option value="w">W</option><option value="d">D</option><option value="l">L</option>
+          </select></td>
+          <td><button class="btn btn-danger btn-sm rm-gt" data-g="${gName}" data-i="${i}">&#x2715;</button></td>
+        </tr>`).join('')}</tbody>
+      </table>`:`<p style="color:var(--text3);font-size:12px;font-weight:500;padding:6px 0">No teams in ${gName} yet.</p>`}
+    </div>`;
+  }
+  el.innerHTML=html;
+  qsa('.gi',el).forEach(inp=>inp.addEventListener('change',function(){
+    S.groups[this.dataset.g][+this.dataset.i][this.dataset.f]=parseInt(this.value)||0;save();
+  }));
+  qsa('.gf-sel',el).forEach(sel=>sel.addEventListener('change',function(){
+    if(!this.value)return;
+    const t=S.groups[this.dataset.g][+this.dataset.i];
+    if(!t.form)t.form=[];
+    t.form.push(this.value);
+    save();renderAdminGroups();
+  }));
+  qsa('.rm-gt',el).forEach(btn=>btn.addEventListener('click',function(){
+    S.groups[this.dataset.g].splice(+this.dataset.i,1);save();renderAdminGroups();
+  }));
+}
+
+function renderAdminKnockout(){
+  const el=$$('ko-edit');if(!el)return;
+  el.innerHTML=S.knockout.map((r,ri)=>`<div style="margin-bottom:20px">
+    <div style="font-family:'Barlow Condensed';font-weight:800;font-size:15px;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;color:var(--accent)">${r.round}</div>
+    ${r.matches.map((m,mi)=>`<div style="background:var(--bg3);border:1px solid var(--border);border-radius:9px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;transition:background .3s">
+      <input class="ev-inp-text ko-inp" data-ri="${ri}" data-mi="${mi}" data-f="home" value="${m.home}" placeholder="Home Team" style="flex:1;min-width:110px" />
+      <input type="number" class="ev-inp-num ko-inp" data-ri="${ri}" data-mi="${mi}" data-f="homeScore" value="${m.homeScore||0}" style="font-size:20px;width:52px" />
+      <span style="font-family:'Barlow Condensed';font-weight:900;font-size:16px;color:var(--text3)"> : </span>
+      <input type="number" class="ev-inp-num ko-inp" data-ri="${ri}" data-mi="${mi}" data-f="awayScore" value="${m.awayScore||0}" style="font-size:20px;width:52px" />
+      <input class="ev-inp-text ko-inp" data-ri="${ri}" data-mi="${mi}" data-f="away" value="${m.away}" placeholder="Away Team" style="flex:1;min-width:110px" />
+      <select class="sel-compact ko-status" data-ri="${ri}" data-mi="${mi}">
+        <option value="upcoming" ${m.status==='upcoming'?'selected':''}>Upcoming</option>
+        <option value="live" ${m.status==='live'?'selected':''}>Live</option>
+        <option value="finished" ${m.status==='finished'?'selected':''}>FT</option>
+      </select>
+    </div>`).join('')}
+  </div>`).join('');
+  qsa('.ko-inp',el).forEach(inp=>inp.addEventListener('change',function(){
+    const f=this.dataset.f;
+    S.knockout[+this.dataset.ri].matches[+this.dataset.mi][f]=f.includes('Score')?parseInt(this.value)||0:this.value;save();
+  }));
+  qsa('.ko-status',el).forEach(sel=>sel.addEventListener('change',function(){
+    S.knockout[+this.dataset.ri].matches[+this.dataset.mi].status=this.value;save();
+  }));
+}
+
+function renderAdminScorers(){
+  const el=$$('sc-edit');if(!el)return;
+  if(!S.scorers.length){el.innerHTML='<p style="color:var(--text3);font-size:13px;font-weight:500">No scorers added yet.</p>';return;}
+  el.innerHTML=`<table class="a-tbl"><thead><tr><th>Player</th><th>Team</th><th>Goals</th><th></th></tr></thead>
+    <tbody>${S.scorers.map((s,i)=>`<tr>
+      <td style="font-weight:700">${s.name}</td><td style="color:var(--text2)">${s.team}</td>
+      <td><input type="number" value="${s.goals}" min="0" class="grp-inp sc-gi" data-i="${i}" style="width:54px" /></td>
+      <td><button class="btn btn-danger btn-sm rm-sc" data-i="${i}">Remove</button></td>
+    </tr>`).join('')}</tbody></table>`;
+  qsa('.sc-gi',el).forEach(inp=>inp.addEventListener('change',function(){
+    S.scorers[+this.dataset.i].goals=parseInt(this.value)||0;save();
+  }));
+  qsa('.rm-sc',el).forEach(btn=>btn.addEventListener('click',function(){
+    S.scorers.splice(+this.dataset.i,1);save();renderAdminScorers();
+  }));
+}
+
+function openAdmin(){
+  $$('admin-overlay').classList.add('open');
+  renderAdminLive();renderAdminMatchesTable();renderAdminGroups();renderAdminKnockout();renderAdminScorers();
+}
+
+/* ─── EVENTS ─────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',function(){
+
+  // Nav tabs
+  $$('nav-strip').addEventListener('click',function(e){
+    const tab=e.target.closest('.tab');if(!tab)return;
+    qsa('.tab').forEach(t=>t.classList.remove('active'));
+    qsa('.page').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    $$('page-'+tab.dataset.page).classList.add('active');
+    renderAll();
+  });
+
+  // Fixture filters
+  $$('filter-bar').addEventListener('click',function(e){
+    const btn=e.target.closest('.fbtn');if(!btn)return;
+    qsa('.fbtn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderFixtures(btn.dataset.f);
+  });
+
+  // Admin open
+  $$('admin-btn').addEventListener('click',function(){
+    if(sessionStorage.getItem('fa_auth')){openAdmin();return;}
+    $$('login-overlay').classList.add('open');
+    $$('login-pw').value='';
+    $$('login-err').style.display='none';
+    setTimeout(()=>$$('login-pw').focus(),80);
+  });
+
+  function tryLogin(){
+    if($$('login-pw').value==='cybernauts'){
+      sessionStorage.setItem('fa_auth','1');
+      $$('login-overlay').classList.remove('open');
+      openAdmin();
+    }else{
+      $$('login-err').style.display='block';
+      $$('login-pw').value='';
+      $$('login-pw').focus();
+    }
+  }
+  $$('login-submit').addEventListener('click',tryLogin);
+  $$('login-pw').addEventListener('keyup',e=>{if(e.key==='Enter')tryLogin();});
+  $$('login-cancel').addEventListener('click',()=>$$('login-overlay').classList.remove('open'));
+
+  $$('admin-close').addEventListener('click',function(){
+    $$('admin-overlay').classList.remove('open');
+    renderAll();
+  });
+
+  // Admin nav tabs
+  $$('admin-nav').addEventListener('click',function(e){
+    const btn=e.target.closest('.anav');if(!btn)return;
+    qsa('.anav').forEach(b=>b.classList.remove('active'));
+    qsa('.a-sec').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    $$('a-'+btn.dataset.sec).classList.add('active');
+  });
+
+  // Add match
+  $$('add-match-btn').addEventListener('click',function(){
+    const home=val('m-home'),away=val('m-away');
+    if(!home||!away){alert('Please enter both team names.');return;}
+    S.matches.push({
+      home,away,
+      haHome:val('m-ha')||abbr(home),
+      haAway:val('m-aa')||abbr(away),
+      date:$$('m-date').value,time:$$('m-time').value,
+      venue:val('m-venue'),stage:$$('m-stage').value,
+      status:$$('m-status').value,
+      homeScore:0,awayScore:0,minute:0,events:[]
+    });
+    save();
+    ['m-home','m-away','m-ha','m-aa','m-venue'].forEach(id=>{$$(id).value='';});
+    renderAdminMatchesTable();renderAdminLive();
+    toast('Match Scheduled',`${home} vs ${away} has been added to fixtures.`,'match');
+  });
+
+  // Add group team
+  $$('add-grp-btn').addEventListener('click',function(){
+    const name=val('g-name'),gr=$$('g-grp').value,ab=val('g-abbr')||abbr(name);
+    if(!name)return;
+    if(!S.groups[gr])S.groups[gr]=[];
+    S.groups[gr].push({name,abbr:ab,p:0,w:0,d:0,l:0,gf:0,ga:0,pts:0,form:[]});
+    save();renderAdminGroups();
+    $$('g-name').value='';$$('g-abbr').value='';
+  });
+
+  // ─── PUSH NOTIFICATIONS via OneSignal ──────────────────
+  var OS_APP_ID = '7ff009d9-b4e1-46c4-b38c-c7761c6f7c59';
+  // ★ ADMIN: Paste your OneSignal REST API Key below (Settings → Keys & IDs)
+  var OS_REST_KEY = 'os_v2_app_p7yatwnu4fdmjm4my53by3341fmod1pnx33uttnue2yuf3fzmgjcc544idazaf55yh6icui3uerbczkrky2wvila56rdptaol65y2aa';
+  var pushTarget = '';
+
+  function updatePushStatus(){
+    var dot = $$('push-status-dot');
+    var txt = $$('push-status-text');
+    var inf = $$('push-channel-info');
+    if(!dot||!txt) return;
+    var ready = OS_REST_KEY && OS_REST_KEY !== 'YOUR_REST_API_KEY_HERE';
+    dot.className = 'push-dot ' + (ready ? 'ok' : 'err');
+    txt.textContent = ready ? 'OneSignal active — ready to broadcast.' : 'Add your REST API Key in the code to enable broadcasting.';
+    if(inf) inf.textContent = 'Users tap Allow once → subscribed forever. No app download needed.';
+  }
+
+  function navigateToPage(page){
+    if(!page) return;
+    var tab = document.querySelector('.tab[data-page="'+page+'"]');
+    if(tab){
+      document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+      document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+      tab.classList.add('active');
+      var pg = $$('page-'+page);
+      if(pg) pg.classList.add('active');
+      renderAll();
+    }
+  }
+
+  function initOneSignal(){
+    try {
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal){
+        await OneSignal.init({
+          appId: OS_APP_ID,
+          safari_web_id: '',
+          notifyButton: { enable: false },
+          allowLocalhostAsSecureOrigin: true,
+        });
+        // Show our custom banner if not yet subscribed
+        var permission = await OneSignal.Notifications.permission;
+        if(!permission && !sessionStorage.getItem('push_dismissed')){
+          setTimeout(function(){
+            var b = $$('push-banner');
+            if(b) b.classList.add('show');
+          }, 3000);
+        }
+      });
+    } catch(e){ console.warn('OneSignal init error', e); }
+  }
+
+  var pushAllowBtn = $$('push-allow-btn');
+  var pushDenyBtn  = $$('push-deny-btn');
+
+  if(pushAllowBtn) pushAllowBtn.addEventListener('click', function(){
+    var banner = $$('push-banner');
+    if(banner) banner.classList.remove('show');
+    try {
+      OneSignalDeferred.push(async function(OneSignal){
+        await OneSignal.Notifications.requestPermission();
+        var granted = await OneSignal.Notifications.permission;
+        if(granted){
+          toast('🔔 Notifications On', 'You\'ll get live match alerts — goals, red cards & more!', 'info');
+        } else {
+          toast('Notifications Blocked', 'Enable them in browser settings to get alerts.', 'info');
+        }
+      });
+    } catch(e){}
+  });
+
+  if(pushDenyBtn) pushDenyBtn.addEventListener('click', function(){
+    var b = $$('push-banner'); if(b) b.classList.remove('show');
+    try{ sessionStorage.setItem('push_dismissed','1'); }catch(e){}
+  });
+
+  var pushTargetTabs = $$('push-target-tabs');
+  if(pushTargetTabs) pushTargetTabs.addEventListener('click', function(e){
+    var btn = e.target.closest('.ptab'); if(!btn) return;
+    document.querySelectorAll('.ptab').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    pushTarget = btn.dataset.page || '';
+  });
+
+  async function broadcastPush(title, body, type, page){
+    try {
+      var res = await fetch('/.netlify/functions/send-notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: title, message: body, type: type, page: page||'' })
+      });
+      var data = await res.json();
+      return data.ok === true;
+    } catch(e){ return false; }
+  }
+
+  // Broadcast button
+  $$('send-notif-btn').addEventListener('click', async function(){
+    var title = val('n-title'), body = val('n-body'), type = $$('n-type').value;
+    if(!title||!body){ alert('Please fill in title and message.'); return; }
+    var btn = this;
+    btn.textContent = 'Sending…'; btn.disabled = true;
+    var ok = await broadcastPush(title, body, type, pushTarget);
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:15px;height:15px;vertical-align:middle;margin-right:6px"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>Broadcast to All Users';
+    btn.disabled = false;
+    if(ok){
+      toast(title, body, type);
+      $$('n-title').value = ''; $$('n-body').value = '';
+    } else {
+      toast('Broadcast Failed', 'Check your REST API Key and internet connection.', 'red-card');
+    }
+  });
+
+  // Quick goal button
+  $$('quick-goal-btn').addEventListener('click', async function(){
+    var scorer = val('qn-scorer'), team = val('qn-team'), min = $$('qn-min').value;
+    if(!scorer||!team){ alert('Please enter scorer and team.'); return; }
+    var title = '⚽ GOAL!';
+    var body = scorer + ' scores at ' + (min||'?') + "' for " + team;
+    toast(title, body, 'goal');
+    var ok = await broadcastPush(title, body, 'goal', 'matches');
+    $$('qn-scorer').value = ''; $$('qn-team').value = ''; $$('qn-min').value = '';
+    if(!ok) toast('Broadcast Failed', 'In-app toast shown. Check REST API Key.', 'info');
+  });
+
+  // Init on load
+  updatePushStatus();
+  initOneSignal();
+
+  // Add scorer
+  $$('add-sc-btn').addEventListener('click',function(){
+    const name=val('sc-name'),team=val('sc-team'),goals=parseInt($$('sc-goals').value)||0,ab=val('sc-abbr')||abbr(name);
+    if(!name||!team)return;
+    const ei=S.scorers.findIndex(s=>s.name===name);
+    if(ei>=0)S.scorers[ei]={name,team,goals,abbr:ab};
+    else S.scorers.push({name,team,goals,abbr:ab});
+    save();renderAdminScorers();
+    ['sc-name','sc-team','sc-goals','sc-abbr'].forEach(id=>{$$(id).value='';});
+  });
+
+  renderAll();
+
+  // ── Cloud Sync UI ──
+  function refreshCloudUI(){
+    const configured = cloudConfigured();
+    const c = getCredentials();
+    const dot = document.getElementById('cloud-status-dot');
+    const msg = document.getElementById('cloud-status-msg');
+    const disconnBtn = document.getElementById('cloud-disconnect-btn');
+    const toggleBtn  = document.getElementById('cloud-toggle-btn');
+    if(dot) dot.style.background = configured ? 'var(--accent)' : 'var(--amber)';
+    if(msg) msg.textContent = configured
+      ? '✓ Connected — all users see live data (syncs every 20s)'
+      : 'Not configured — data only saves on this device';
+    if(disconnBtn) disconnBtn.style.display = configured ? 'inline-flex' : 'none';
+    if(configured && toggleBtn) toggleBtn.textContent = 'Settings ▾';
+    updateSyncIndicator();
+    // Pre-fill inputs
+    const binInp = document.getElementById('cloud-bin-id');
+    const keyInp = document.getElementById('cloud-api-key');
+    if(binInp && c.binId) binInp.value = c.binId;
+    if(keyInp && c.apiKey) keyInp.value = c.apiKey;
+  }
+
+  // Toggle form
+  const cloudToggleBtn = document.getElementById('cloud-toggle-btn');
+  const cloudForm = document.getElementById('cloud-form');
+  if(cloudToggleBtn && cloudForm){
+    cloudToggleBtn.addEventListener('click', function(){
+      const open = cloudForm.style.display !== 'none';
+      cloudForm.style.display = open ? 'none' : 'block';
+      cloudToggleBtn.textContent = open ? (cloudConfigured()?'Settings ▾':'Setup ▾') : '▴ Close';
+    });
+  }
+
+  // Connect button
+  const cloudConnectBtn = document.getElementById('cloud-connect-btn');
+  if(cloudConnectBtn) cloudConnectBtn.addEventListener('click', async function(){
+    const binId  = (document.getElementById('cloud-bin-id').value||'').trim();
+    const apiKey = (document.getElementById('cloud-api-key').value||'').trim();
+    if(!binId || !apiKey){ alert('Please enter both Bin ID and API Key.'); return; }
+    cloudConnectBtn.textContent = 'Connecting…'; cloudConnectBtn.disabled = true;
+    setCredentials(binId, apiKey);
+    // Test & push current data to cloud
+    try{
+      const res = await fetch('https://api.jsonbin.io/v3/b/'+binId, {
+        method:'PUT',
+        headers:{'Content-Type':'application/json','X-Master-Key':apiKey,'X-Bin-Versioning':'false'},
+        body: JSON.stringify(S)
+      });
+      if(res.ok){
+        refreshCloudUI();
+        startAutoSync();
+        lastSaveHash = JSON.stringify(S);
+        if(cloudForm) cloudForm.style.display = 'none';
+        if(cloudToggleBtn) cloudToggleBtn.textContent = 'Settings ▾';
+        toast('☁️ Cloud Sync Active','All users now see your data in real-time!','info');
+      } else {
+        throw new Error('HTTP '+res.status);
+      }
+    } catch(e){
+      toast('Connection Failed','Check your Bin ID and API Key and try again.','red-card');
+    }
+    cloudConnectBtn.textContent = 'Connect & Sync'; cloudConnectBtn.disabled = false;
+  });
+
+  // Test button
+  const cloudTestBtn = document.getElementById('cloud-test-btn');
+  if(cloudTestBtn) cloudTestBtn.addEventListener('click', async function(){
+    const binId  = (document.getElementById('cloud-bin-id').value||'').trim();
+    const apiKey = (document.getElementById('cloud-api-key').value||'').trim();
+    const result = document.getElementById('cloud-test-result');
+    if(!binId||!apiKey){ if(result){result.style.display='block';result.style.color='var(--red)';result.textContent='Enter both fields first.';} return; }
+    cloudTestBtn.textContent = 'Testing…'; cloudTestBtn.disabled = true;
+    try{
+      const res = await fetch('https://api.jsonbin.io/v3/b/'+binId+'/latest',{
+        headers:{'X-Master-Key':apiKey,'X-Bin-Meta':'false'}
+      });
+      if(result){
+        result.style.display='block';
+        if(res.ok){ result.style.color='var(--accent)'; result.textContent='✓ Connection successful! Tap Connect & Sync to activate.'; }
+        else { result.style.color='var(--red)'; result.textContent='✗ Failed ('+res.status+'). Check your Bin ID and API Key.'; }
+      }
+    } catch(e){
+      if(result){ result.style.display='block'; result.style.color='var(--red)'; result.textContent='✗ Network error. Check your connection.'; }
+    }
+    cloudTestBtn.textContent = 'Test Connection'; cloudTestBtn.disabled = false;
+  });
+
+  // Disconnect button
+  const cloudDisconnectBtn = document.getElementById('cloud-disconnect-btn');
+  if(cloudDisconnectBtn) cloudDisconnectBtn.addEventListener('click', function(){
+    if(!confirm('Disconnect cloud sync? Data will only save on this device.')) return;
+    localStorage.removeItem('funaab_bin_id');
+    localStorage.removeItem('funaab_api_key');
+    if(syncTimer){ clearInterval(syncTimer); syncTimer=null; }
+    refreshCloudUI();
+    toast('Cloud Disconnected','Switched back to local storage.','info');
+  });
+
+  // Init cloud
+  refreshCloudUI();
+  if(cloudConfigured()){
+    fetchCloud();
+    startAutoSync();
+  }
+
+  // Welcome toast
+  if(!sessionStorage.getItem('fa_welcomed')){
+    setTimeout(()=>{
+      toast('Welcome to FUNAAB FA Cup 2026','Live scores, standings and match events — all in one place.','info');
+      sessionStorage.setItem('fa_welcomed','1');
+    },1200);
+  }
+});
+
+})();
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('/OneSignalSDKWorker.js', { scope: '/' });
+    });
+  }
+</script>
+</body>
+</html>
